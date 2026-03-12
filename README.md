@@ -1,5 +1,24 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Email Verification Setup
+
+Booking verification email is integrated with Resend and booking records are persisted in Supabase.
+
+Add these to your `.env.local`:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY
+RESEND_API_KEY=re_xxxxxxxxx
+EMAIL_FROM=WashMe <no-reply@yourdomain.com>
+```
+
+Run the SQL schema in your Supabase SQL editor:
+
+- `sql/001_create_bookings.sql`
+
+If Supabase or email values are missing, the app falls back to local development mode and prints verification payloads to server logs.
+
 ## Getting Started
 
 First, run the development server:
@@ -34,3 +53,4 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# washme
