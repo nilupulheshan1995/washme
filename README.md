@@ -11,7 +11,7 @@ SUPABASE_URL=https://YOUR_PROJECT.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY
 EMAIL_USER=yourgmail@gmail.com
 EMAIL_PASS=your_gmail_app_password
-EMAIL_SENDER_NAME=WashMe
+EMAIL_FROM="WashMe <yourgmail@gmail.com>"
 ```
 
 Run the SQL schema in your Supabase SQL editor:

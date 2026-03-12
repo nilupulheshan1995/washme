@@ -78,7 +78,7 @@ export const sendVerificationEmail = async (
 ): Promise<SendVerificationEmailResult> => {
   const emailUser = process.env.EMAIL_USER;
   const emailPass = process.env.EMAIL_PASS;
-  const senderName = process.env.EMAIL_SENDER_NAME ?? "WashMe";
+  const senderEmail = process.env.EMAIL_FROM?.trim() || emailUser;
 
   if (!emailUser || !emailPass) {
     console.info("[email:console_fallback] verification payload", {
@@ -108,10 +108,7 @@ export const sendVerificationEmail = async (
   });
 
   const sendInfo = await transporter.sendMail({
-    from: {
-      address: emailUser,
-      name: senderName,
-    },
+    from: senderEmail,
     to: [input.to],
     subject: `Confirm your WashMe booking at ${input.storeName}`,
     html: emailHtml(input),
