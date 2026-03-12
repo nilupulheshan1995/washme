@@ -66,7 +66,7 @@ export async function POST(request: Request) {
     const verificationUrl = `${origin}/verify/${verificationToken}`;
     let emailResult: {
       delivered: boolean;
-      provider: "resend" | "console";
+      provider: "gmail" | "console";
       messageId?: string;
     };
     try {

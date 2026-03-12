@@ -2,15 +2,16 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Email Verification Setup
 
-Booking verification email is integrated with Resend and booking records are persisted in Supabase.
+Booking verification email is integrated with Gmail SMTP (Nodemailer) and booking records are persisted in Supabase.
 
 Add these to your `.env.local`:
 
 ```bash
 SUPABASE_URL=https://YOUR_PROJECT.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY
-RESEND_API_KEY=re_xxxxxxxxx
-EMAIL_FROM=WashMe <no-reply@yourdomain.com>
+EMAIL_USER=yourgmail@gmail.com
+EMAIL_PASS=your_gmail_app_password
+EMAIL_SENDER_NAME=WashMe
 ```
 
 Run the SQL schema in your Supabase SQL editor:

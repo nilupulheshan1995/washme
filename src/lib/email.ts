@@ -1,3 +1,5 @@
+import Nodemailer from "nodemailer";
+
 type SendVerificationEmailInput = {
   to: string;
   customerName: string;
@@ -14,7 +16,7 @@ type SendVerificationEmailInput = {
 
 type SendVerificationEmailResult = {
   delivered: boolean;
-  provider: "resend" | "console";
+  provider: "gmail" | "console";
   messageId?: string;
 };
 
@@ -74,10 +76,11 @@ const emailHtml = ({
 export const sendVerificationEmail = async (
   input: SendVerificationEmailInput
 ): Promise<SendVerificationEmailResult> => {
-  const resendApiKey = process.env.RESEND_API_KEY;
-  const senderEmail = process.env.EMAIL_FROM;
+  const emailUser = process.env.EMAIL_USER;
+  const emailPass = process.env.EMAIL_PASS;
+  const senderName = process.env.EMAIL_SENDER_NAME ?? "WashMe";
 
-  if (!resendApiKey || !senderEmail) {
+  if (!emailUser || !emailPass) {
     console.info("[email:console_fallback] verification payload", {
       to: input.to,
       storeName: input.storeName,
@@ -96,41 +99,39 @@ export const sendVerificationEmail = async (
     };
   }
 
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${resendApiKey}`,
-      "Content-Type": "application/json",
+  const transporter = Nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: emailUser,
+      pass: emailPass,
     },
-    body: JSON.stringify({
-      from: senderEmail,
-      to: [input.to],
-      subject: `Confirm your WashMe booking at ${input.storeName}`,
-      html: emailHtml(input),
-      text: [
-        `Confirm your WashMe booking`,
-        `Service Center: ${input.storeName}`,
-        `Address: ${input.storeAddress}`,
-        `Google Map: ${input.storeGoogleMapsUrl}`,
-        `Booking Date: ${input.bookingDate}`,
-        `Booking Time: ${input.bookingTime}`,
-        `Customer Name: ${input.customerName}`,
-        `Customer Email: ${input.customerEmail}`,
-        `Customer Phone: ${input.customerPhone}`,
-        `Confirmation Link: ${input.verificationUrl}`,
-      ].join("\n"),
-    }),
   });
 
-  const payload = (await response.json()) as { id?: string; message?: string };
-
-  if (!response.ok) {
-    throw new Error(payload.message ?? "Failed to send verification email.");
-  }
+  const sendInfo = await transporter.sendMail({
+    from: {
+      address: emailUser,
+      name: senderName,
+    },
+    to: [input.to],
+    subject: `Confirm your WashMe booking at ${input.storeName}`,
+    html: emailHtml(input),
+    text: [
+      `Confirm your WashMe booking`,
+      `Service Center: ${input.storeName}`,
+      `Address: ${input.storeAddress}`,
+      `Google Map: ${input.storeGoogleMapsUrl}`,
+      `Booking Date: ${input.bookingDate}`,
+      `Booking Time: ${input.bookingTime}`,
+      `Customer Name: ${input.customerName}`,
+      `Customer Email: ${input.customerEmail}`,
+      `Customer Phone: ${input.customerPhone}`,
+      `Confirmation Link: ${input.verificationUrl}`,
+    ].join("\n"),
+  });
 
   return {
     delivered: true,
-    provider: "resend",
-    messageId: payload.id,
+    provider: "gmail",
+    messageId: sendInfo.messageId,
   };
 };
