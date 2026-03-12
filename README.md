@@ -7,7 +7,7 @@ Booking verification email is integrated with Resend and booking records are per
 Add these to your `.env.local`:
 
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+SUPABASE_URL=https://YOUR_PROJECT.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY
 RESEND_API_KEY=re_xxxxxxxxx
 EMAIL_FROM=WashMe <no-reply@yourdomain.com>
